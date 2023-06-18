@@ -5,8 +5,8 @@ import java.util.Iterator;
  * @param <E> generic type of all elements in the stack
  */
 public class ArrayStack<E extends Cloneable> implements Stack<E>, Cloneable, Iterable<E>{
-    transient Object[] arr;
-    int lastIndex;
+    private transient Object[] arr;
+    private int lastIndex;
 
     /**
      * constructs ArrayStack
@@ -95,12 +95,12 @@ public class ArrayStack<E extends Cloneable> implements Stack<E>, Cloneable, Ite
     public class StackIterator<E> implements Iterator<E> {
         @Override
         public boolean hasNext() {
-            //todo: implement has next
+            //Todo: implement has next
         }
 
         @Override
         public E next() {
-            //todo: implement next
+            //Todo: implement next
         }
     }
 }

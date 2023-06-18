@@ -1,3 +1,5 @@
+import java.io.ObjectInputStream;
+
 public class Song implements Cloneable{
     private final String name;
     private final String artist;
@@ -10,6 +12,20 @@ public class Song implements Cloneable{
         this.genre = genre;
         this.duration = new Duration(secondsDuration);
     }
+    public String getName(){
+        return this.name;
+    }
+    public String getArtist(){
+        return this.artist;
+    }
+
+    public Genre getGenre(){
+        return this.genre;
+    }
+    //not sure about this way of implementing
+    public int getDurationInSeconds(){
+        return duration.getDurationInSeconds();
+    }
 
     public void setGenre(Genre genre) {
         this.genre = genre;
@@ -20,7 +36,7 @@ public class Song implements Cloneable{
     }
 
     @Override
-    public Object clone() {
+    public Song clone() {
         try {
             return new Song(this.name, this.artist, this.genre, this.duration.getDurationInSeconds());
         }
@@ -43,14 +59,12 @@ public class Song implements Cloneable{
         Song otherSong = (Song)other;
         boolean isNameEquals = this.name.compareTo(otherSong.name) == 0;
         boolean isArtistEquals = this.artist.compareTo(otherSong.artist) == 0;
-        boolean isGenreAndDurationEquals = (this.genre == otherSong.genre && this.duration.equals(otherSong.duration));
-        return isNameEquals && isArtistEquals && isGenreAndDurationEquals;
+        return isNameEquals && isArtistEquals;
     }
 
     @Override
     public int hashCode() {
-        int hasStrings = this.name.hashCode() + this.artist.hashCode();
-        return hasStrings + this.genre.ordinal() * 10000 + this.duration.hashCode() * 500;
+        return (this.name+this.artist).hashCode();
     }
 
     public enum Genre {
@@ -59,6 +73,6 @@ public class Song implements Cloneable{
         HIP_HOP,
         COUNTRY,
         JAZZ,
-        DISCO;
+        DISCO
     }
 }
