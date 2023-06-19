@@ -89,11 +89,19 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
     }
     @Override
     public Playlist clone(){
-        Playlist copiedPlaylist = new Playlist(this.songList.size());
-        for(Song song: this.songList){
-            copiedPlaylist.addSong(song.clone());
+        try{
+            Playlist copiedPlaylist = new Playlist(this.songList.size());
+            for(Song song: this.songList){
+                Song songCopy = song.clone();
+                if (songCopy==null) throw new NullPointerException();
+                copiedPlaylist.addSong(song.clone());
+            }
+            return copiedPlaylist;
+        } catch(NullPointerException e){
+            return null;
         }
-        return copiedPlaylist;
+
+
     }
     @Override
     public Iterator<Song> iterator(){
