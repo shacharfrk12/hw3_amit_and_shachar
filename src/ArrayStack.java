@@ -1,3 +1,5 @@
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 
 /**
@@ -27,9 +29,9 @@ public class ArrayStack<E extends Cloneable> implements Stack<E>, Cloneable, Ite
      */
     @Override
     public void push(E element) throws StackOverflowException{
-        if(this.lastIndex >= this.arr.length)
+        if(this.lastIndex + 1 >= this.arr.length)
             throw new StackOverflowException("Tried to push element into a full stack");
-        this.arr[this.lastIndex] = element;
+        this.arr[this.lastIndex + 1] = element;
         this.lastIndex++;
     }
 
@@ -85,6 +87,37 @@ public class ArrayStack<E extends Cloneable> implements Stack<E>, Cloneable, Ite
 
     @Override
     public ArrayStack<E> clone(){
+        ArrayStack<E> copy = new ArrayStack<>(this.arr.length);
+        ArrayStack<E> temp = new ArrayStack<>(this.arr.length);
+        if (this.isEmpty()) {
+            copy.lastIndex = this.lastIndex;
+            return copy;
+        }
+        Method method = null;
+        try {
+            // TODO: should I delete the import for this?
+            method = this.peek().getClass().getMethod("clone", null);
+        }
+        catch (NoSuchMethodException e) {
+            return null;
+        }
+        while (!temp.isEmpty()) {
+            try {
+                Object elementCopy = method.invoke((temp.pop()));
+                copy.push((E) elementCopy);
+            }
+            catch (IllegalAccessException e) {
+                return null;
+            }
+            catch (InvocationTargetException e) {
+                return null;
+            }
+            catch (ClassCastException e) {
+                throw new RuntimeException("This is a problem (in clone in ArrayStack)");
+            }
+        }
+        copy.lastIndex = this.lastIndex;
+        return copy;
         //todo: implement clone (remember to do it in deep copy - copy the stack object as well as the stack
     }
     @Override
@@ -93,14 +126,16 @@ public class ArrayStack<E extends Cloneable> implements Stack<E>, Cloneable, Ite
     }
 
     public class StackIterator<E> implements Iterator<E> {
+        int nextIndex = 0;
+
         @Override
         public boolean hasNext() {
-            //Todo: implement has next
+            return this.nextIndex <= lastIndex;
         }
 
         @Override
         public E next() {
-            //Todo: implement next
+            return (E)arr[nextIndex++];
         }
     }
 }
