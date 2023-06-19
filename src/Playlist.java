@@ -89,6 +89,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         return copiedPlaylist;
     }
     @Override
+    // TODO: add as iterator
     public Iterator<Song> iterator(){
         Playlist filtered = this.clone();
         if(artistToFilter != null)
