@@ -72,7 +72,7 @@ public class ArrayStack<E extends Cloneable> implements Stack<E>, Cloneable, Ite
      */
     @Override
     public int size(){
-        return lastIndex;
+        return lastIndex+1;
     }
 
     /**
