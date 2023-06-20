@@ -127,7 +127,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
                     ordered.songList.sort(Comparator.comparing(s -> s.getName()));
                     break;
                 case DURATION:
-                    ordered.songList.sort(Comparator.comparing(s -> s.getDurationInSeconds()));
+                    ordered.songList.sort(Comparator.comparing(s -> s.getDuration()));
                     break;
             }
             list = ordered.songList;
@@ -137,7 +137,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
             while(index+1<list.size()){
                 Song next = list.get(index+1);
                 if(!(next.getArtist().equals(artist) || next.getGenre().equals(genre) ||
-                        next.getDurationInSeconds()==duration)){
+                        next.getDuration()==duration)){
                     return true;
                 }
                 index++;
@@ -149,7 +149,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
             while(index<list.size()){
                 Song next = list.get(index++);
                 if(!(next.getArtist().equals(artist) || next.getGenre().equals(genre) ||
-                        next.getDurationInSeconds()==duration)){
+                        next.getDuration()==duration)){
                     return next;
                 }
             }

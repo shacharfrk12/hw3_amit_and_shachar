@@ -85,6 +85,10 @@ public class ArrayStack<E extends Cloneable> implements Stack<E>, Cloneable, Ite
     }
 
 
+    /**
+     * clone the current stack in deep copy
+     * @return the copy of the stack
+     */
     @Override
     public ArrayStack<E> clone(){
         ArrayStack<E> copy = new ArrayStack<>(this.arr.length);
@@ -120,22 +124,39 @@ public class ArrayStack<E extends Cloneable> implements Stack<E>, Cloneable, Ite
         return copy;
         //todo: implement clone (remember to do it in deep copy - copy the stack object as well as the stack
     }
+
+    /**
+     * Create and return an iterator of the current ArrayStack
+     * @return the iterator
+     */
     @Override
     public StackIterator<E> iterator(){
         return new StackIterator<E>();
     }
 
-    public class StackIterator<E> implements Iterator<E> {
-        int nextIndex = 0;
+    /**
+     * An iterator for ArrayStack object
+     * @param <E> the same type of object as in its ArrayStack. should be Cloneable as well
+     */
+    public class StackIterator<E extends Cloneable> implements Iterator<E> {
+        int nextIndex = lastIndex;
 
+        /**
+         * check if there is another element to iterate on
+         * @return true if there is another element, false otherwise
+         */
         @Override
         public boolean hasNext() {
-            return this.nextIndex <= lastIndex;
+            return this.nextIndex >= 0;
         }
 
+        /**
+         * assuming there is 'next' element, find it
+         * @return the next element to iterate on
+         */
         @Override
         public E next() {
-            return (E)arr[nextIndex++];
+            return (E)arr[nextIndex--];
         }
     }
 }
