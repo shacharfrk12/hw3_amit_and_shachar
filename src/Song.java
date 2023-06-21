@@ -9,7 +9,7 @@ public class Song implements Cloneable{
     private Genre genre;
     private int duration;
     // minimum number of digits to show in toString (add zeroes at the beginning if necessary)
-    private final static int NUM_DIGITS_IN_MINUTES = 2;
+    private final static int NUM_DIGITS_IN_SECONDS = 2;
 
     public Song(String name, String artist, Genre genre, int duration) {
         this.name = name;
@@ -111,10 +111,9 @@ public class Song implements Cloneable{
      */
     @Override
     public String toString() {
-        // TODO: make sure that works
-        int zeroes_to_add_to_minutes = this.numOfZeroesToAdd(this.duration / 60, Song.NUM_DIGITS_IN_MINUTES);
-        String minutes_to_show = addZeroes(this.duration, zeroes_to_add_to_minutes);
-        String seconds_to_show = Integer.toString(this.duration % 60);
+        int zeroes_to_add_to_seconds = this.numOfZeroesToAdd(this.duration % 60, Song.NUM_DIGITS_IN_SECONDS);
+        String seconds_to_show = addZeroes(this.duration % 60, zeroes_to_add_to_seconds);
+        String minutes_to_show = Integer.toString(this.duration / 60);
         return this.name + ", " + this.artist + ", " + this.genre + ", " + minutes_to_show + ":" + seconds_to_show;
     }
 

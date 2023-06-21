@@ -103,6 +103,10 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         this.order = order;
     }
 
+    /**
+     * Concatenates the playlist as list of songs in format [(songString),(songString),...,(songString)]
+     * @return string representation of Playlist
+     */
     @Override
     public String toString(){
         String playlistString = "[";
@@ -115,14 +119,24 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         playlistString += "]";
         return playlistString;
     }
+
+    /**
+     * Checks if this playlist is equal to other in contents(both have the same songs, disregarding their order)
+     * @param other other object to compare to
+     * @return true if the objets are equal, false otherwise
+     */
     @Override
     public boolean equals(Object other){
         if(!(other instanceof Playlist))
             return false;
         return (this.songList.containsAll(((Playlist)other).songList)) &&
                 (((Playlist)other).songList.containsAll(this.songList));
-
     }
+
+    /**
+     * Calculates hashcode according to songs in playlist
+     * @return the hasCode
+     */
     @Override
     public int hashCode(){
         int sumHashCodes = 0;
@@ -130,6 +144,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
             sumHashCodes += song.hashCode();
         return sumHashCodes;
     }
+
     @Override
     public Playlist clone(){
         try{
@@ -165,7 +180,6 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
          * Constructor of PlaylistIterator
          * @param playlist A playlist to iterate
          */
-
         public PlaylistIterator(Playlist playlist){
             Playlist ordered = playlist.clone();
             artist = playlist.artistToFilter;
@@ -186,8 +200,8 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         }
         @Override
         public boolean hasNext(){
-            while(index+1<list.size()){
-                Song next = list.get(index+1);
+            while(index<list.size()){
+                Song next = list.get(index);
                 if(next.songFitsFilter(artist, genre, duration)){
                     return true;
                 }

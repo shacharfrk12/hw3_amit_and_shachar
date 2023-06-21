@@ -92,37 +92,19 @@ public class ArrayStack<E extends Cloneable> implements Stack<E>, Cloneable, Ite
     @Override
     public ArrayStack<E> clone(){
         ArrayStack<E> copy = new ArrayStack<>(this.arr.length);
-        ArrayStack<E> temp = new ArrayStack<>(this.arr.length);
-        if (this.isEmpty()) {
-            copy.lastIndex = this.lastIndex;
-            return copy;
-        }
-        Method method = null;
         try {
-            // TODO: should I delete the import for this?
-            method = this.peek().getClass().getMethod("clone", null);
-        }
-        catch (NoSuchMethodException e) {
-            return null;
-        }
-        while (!temp.isEmpty()) {
-            try {
-                Object elementCopy = method.invoke((temp.pop()));
+            for (int i = 0; i <= this.lastIndex; i++) {
+                E elementToCopy = (E) this.arr[i];
+                Method method = elementToCopy.getClass().getMethod("clone", null);
+                Object elementCopy = method.invoke(elementToCopy);
                 copy.push((E) elementCopy);
             }
-            catch (IllegalAccessException e) {
-                return null;
-            }
-            catch (InvocationTargetException e) {
-                return null;
-            }
-            catch (ClassCastException e) {
-                throw new RuntimeException("This is a problem (in clone in ArrayStack)");
-            }
+        }
+        catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            return null;
         }
         copy.lastIndex = this.lastIndex;
         return copy;
-        //todo: implement clone (remember to do it in deep copy - copy the stack object as well as the stack
     }
 
     /**
@@ -139,7 +121,11 @@ public class ArrayStack<E extends Cloneable> implements Stack<E>, Cloneable, Ite
      * @param <E> the same type of object as in its ArrayStack. should be Cloneable as well
      */
     public class StackIterator<E extends Cloneable> implements Iterator<E> {
-        int nextIndex = lastIndex;
+        int nextIndex;
+
+        public StackIterator(){
+            this.nextIndex = lastIndex;
+        }
 
         /**
          * check if there is another element to iterate on
