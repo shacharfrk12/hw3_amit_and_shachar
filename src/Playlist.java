@@ -2,6 +2,10 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ArrayList;
 
+/**
+ * This class represent a playlist of songs
+ */
+
 public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable, OrderedSongIterable{
     private ArrayList<Song> songList;
     //filters
@@ -9,6 +13,10 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
     private Song.Genre genreToFilter;
     private int durationToFilter;
     private ScanningOrder order;
+
+    /**
+     * constructor of Empty Playlist
+     */
 
     public Playlist(){
         songList = new ArrayList<Song>();
@@ -18,6 +26,10 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         order = ScanningOrder.ADDING;
     }
 
+    /**
+     * constructor of a Playlist that we know is going to have a certain number of songs
+     * @param startingSize number of song we know the playlist is going to have
+     */
     public Playlist(int startingSize){
         songList = new ArrayList<Song>(startingSize);
         artistToFilter = null;
@@ -26,8 +38,12 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         order = ScanningOrder.ADDING;
     }
 
-    //attributes
-
+    /**
+     * Adds song to playlist
+     * Throws exception in case the song or its similar is already in playlist
+     * @param song a song to add
+     * @throws SongAlreadyExistsException
+     */
     public void addSong(Song song) throws SongAlreadyExistsException{
         if (this.songList.contains(song)){
             throw new SongAlreadyExistsException("The song you are trying to add already exists in Playlist");
@@ -35,6 +51,11 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         this.songList.add(song);
     }
 
+    /**
+     * Removes a given song from playlist
+     * @param song A song to remove
+     * @return true if succeeded to remove song, false if failed
+     */
     public boolean removeSong(Song song){
         if(song==null)
             return false;
@@ -44,17 +65,39 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         }
         return false;
     }
-    public void filterArtist(String Artist){
-        this.artistToFilter = Artist;
+
+    /**
+     * updates playlist attribute so that when the user goes over it, it will only go over the songs of the given artist
+     * if given null it will not filter according to artist
+     * @param artist the artist that all the iterations should have
+     */
+    public void filterArtist(String artist){
+        this.artistToFilter = artist;
     }
+
+    /**
+     * updates playlist attribute so that when the user goes over it, it will only go over the songs of the given genre
+     * if given null it will not filter according to genre
+     * @param genre the genre that all the iterations should have
+     */
     public void filterGenre(Song.Genre genre){
         this.genreToFilter = genre;
     }
-    public void filterDuration(int seconds){
+
+    /**
+     * updates playlist attribute so that when the user goes over it,
+     * it will only go over the songs shorter than or equal to given duration
+     * @param duration the minimum duration that all the iterations should have
+     */
+    public void filterDuration(int duration){
         //maybe we need to think about getting rid of duration class???
-        this.durationToFilter = seconds;
+        this.durationToFilter = duration;
     }
 
+    /**
+     * updates playlist so that when the user goes over it, it will be in the given order
+     * @param order the order to iterate by
+     */
     @Override
     public void setScanningOrder(ScanningOrder order) {
         this.order = order;
@@ -108,6 +151,9 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         return new PlaylistIterator(this);
     }
 
+    /**
+     * This class represents a playlist iterator
+     */
     public class PlaylistIterator implements Iterator<Song>{
         int index=0;
         ArrayList<Song> list;
@@ -115,19 +161,25 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         Song.Genre genre;
         int duration;
 
+        /**
+         * Constructor of PlaylistIterator
+         * @param playlist A playlist to iterate
+         */
+
         public PlaylistIterator(Playlist playlist){
-            duration = playlist.durationToFilter;
+            Playlist ordered = playlist.clone();
             artist = playlist.artistToFilter;
             genre = playlist.genreToFilter;
-            Playlist ordered = playlist.clone();
+            duration = playlist.durationToFilter;
             switch (order){
-                case ADDING:
+                case ADDING: // do nothing - already ordered by adding
                     break;
-                case NAME:
+                case NAME: //order by alphabetical order of name
                     ordered.songList.sort(Comparator.comparing(s -> s.getName()));
                     break;
-                case DURATION:
-                    ordered.songList.sort(Comparator.comparing(s -> s.getDuration()));
+                case DURATION: //order by duration, if equal duration by name, if equal name by author
+                    ordered.songList.sort(Comparator.comparing((Song s) -> s.getDuration()).
+                            thenComparing((Song s) -> s.getName()).thenComparing((Song s) -> s.getArtist()));
                     break;
             }
             list = ordered.songList;
@@ -136,8 +188,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         public boolean hasNext(){
             while(index+1<list.size()){
                 Song next = list.get(index+1);
-                if(!(next.getArtist().equals(artist) || next.getGenre().equals(genre) ||
-                        next.getDuration()==duration)){
+                if(next.songFitsFilter(artist, genre, duration)){
                     return true;
                 }
                 index++;
@@ -148,8 +199,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         public Song next(){
             while(index<list.size()){
                 Song next = list.get(index++);
-                if(!(next.getArtist().equals(artist) || next.getGenre().equals(genre) ||
-                        next.getDuration()==duration)){
+                if(next.songFitsFilter(artist, genre, duration)){
                     return next;
                 }
             }

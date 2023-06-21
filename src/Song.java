@@ -88,6 +88,24 @@ public class Song implements Cloneable{
     }
 
     /**
+     * checks if a song fits a certain filter
+     * @param artistToFilter artist to compare to this artist, it null the song fits the artist filter always,
+     *                       otherwise it only fits if the songs artist is the same as given artist
+     * @param genreToFilter genre to compare to this artist, it null the song fits the genre filter always,
+     *      *               otherwise it only fits if the songs genre is the same as given genre
+     * @param durationToFilter max duration, only fits duration filter if the duration is smaller or equal
+     *                         to given duration
+     * @return true if fits filter, false otherwise
+     */
+    public boolean songFitsFilter(String artistToFilter, Song.Genre genreToFilter,
+                                         int durationToFilter){
+        boolean isArtist = (artistToFilter==null || (this.artist).equals(artistToFilter));
+        boolean isGenre = (genreToFilter==null || (this.genre).equals(genreToFilter));
+        boolean isSmallerThanDuration = (durationToFilter==-1 || (this.duration) <= durationToFilter);
+        return isArtist && isGenre && isSmallerThanDuration;
+    }
+
+    /**
      * calculate string version of instance of song, in this format - "NAME, ARTIST, GENRE, MM:SS"
      * @return the calculated String
      */
