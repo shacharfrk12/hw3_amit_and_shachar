@@ -1,5 +1,3 @@
-import java.io.ObjectInputStream;
-
 /**
  * class that represents a song
  */
@@ -135,7 +133,7 @@ public class Song implements Cloneable{
 
     /**
      * calculate hash code of current song (by its name and artist only)
-     * @return the calculate hash code
+     * @return the calculated hash code
      */
     @Override
     public int hashCode() {

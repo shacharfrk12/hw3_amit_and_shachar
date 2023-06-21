@@ -12,7 +12,7 @@ public class ArrayStack<E extends Cloneable> implements Stack<E>, Cloneable, Ite
 
     /**
      * constructs ArrayStack
-     * @param maxCapacity maximum capicity of stack
+     * @param maxCapacity maximum capacity of stack
      * @throws NegativeCapacityException unchecked exception - it is illegal to enter a negative number as capacity
      */
     public ArrayStack(int maxCapacity) throws NegativeCapacityException{
@@ -120,7 +120,7 @@ public class ArrayStack<E extends Cloneable> implements Stack<E>, Cloneable, Ite
      * An iterator for ArrayStack object
      * @param <E> the same type of object as in its ArrayStack. should be Cloneable as well
      */
-    public class StackIterator<E extends Cloneable> implements Iterator<E> {
+    public class StackIterator<E> implements Iterator<E> {
         int nextIndex;
 
         public StackIterator(){
