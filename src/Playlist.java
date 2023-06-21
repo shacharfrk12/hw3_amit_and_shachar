@@ -19,7 +19,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
      */
 
     public Playlist(){
-        songList = new ArrayList<Song>();
+        songList = new ArrayList<>();
         artistToFilter = null;
         genreToFilter = null;
         durationToFilter = -1;
@@ -31,7 +31,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
      * @param startingSize number of song we know the playlist is going to have
      */
     public Playlist(int startingSize){
-        songList = new ArrayList<Song>(startingSize);
+        songList = new ArrayList<>(startingSize);
         artistToFilter = null;
         genreToFilter = null;
         durationToFilter = -1;
@@ -42,7 +42,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
      * Adds song to playlist
      * Throws exception in case the song or its similar is already in playlist
      * @param song a song to add
-     * @throws SongAlreadyExistsException
+     * @throws SongAlreadyExistsException if the song already exist throws runtime error of this type
      */
     public void addSong(Song song) throws SongAlreadyExistsException{
         if (this.songList.contains(song)){
@@ -175,11 +175,11 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
                 case ADDING: // do nothing - already ordered by adding
                     break;
                 case NAME: //order by alphabetical order of name
-                    ordered.songList.sort(Comparator.comparing(s -> s.getName()));
+                    ordered.songList.sort(Comparator.comparing(Song::getName));
                     break;
                 case DURATION: //order by duration, if equal duration by name, if equal name by author
-                    ordered.songList.sort(Comparator.comparing((Song s) -> s.getDuration()).
-                            thenComparing((Song s) -> s.getName()).thenComparing((Song s) -> s.getArtist()));
+                    ordered.songList.sort(Comparator.comparing(Song::getDuration).
+                            thenComparing(Song::getName).thenComparing(Song::getArtist));
                     break;
             }
             list = ordered.songList;
