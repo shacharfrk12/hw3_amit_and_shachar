@@ -158,8 +158,14 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         } catch(NullPointerException e){
             return null;
         }
+    }
 
-
+    private Playlist shallowCopy(){
+        Playlist copiedPlaylist = new Playlist(this.songList.size());
+        for(Song song: this.songList){
+            copiedPlaylist.addSong(song);
+        }
+        return copiedPlaylist;
     }
     @Override
     public Iterator<Song> iterator(){
@@ -181,7 +187,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
          * @param playlist A playlist to iterate
          */
         public PlaylistIterator(Playlist playlist){
-            Playlist ordered = playlist.clone();
+            Playlist ordered = playlist.shallowCopy();
             artist = playlist.artistToFilter;
             genre = playlist.genreToFilter;
             duration = playlist.durationToFilter;
