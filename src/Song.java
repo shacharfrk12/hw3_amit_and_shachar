@@ -99,7 +99,7 @@ public class Song implements Cloneable{
                                          int durationToFilter){
         boolean isArtist = (artistToFilter==null || (this.artist).equals(artistToFilter));
         boolean isGenre = (genreToFilter==null || (this.genre).equals(genreToFilter));
-        boolean isSmallerThanDuration = (durationToFilter==-1 || (this.duration) <= durationToFilter);
+        boolean isSmallerThanDuration = ((this.duration) <= durationToFilter);
         return isArtist && isGenre && isSmallerThanDuration;
     }
 

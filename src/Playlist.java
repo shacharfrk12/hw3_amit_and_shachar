@@ -22,7 +22,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         songList = new ArrayList<>();
         artistToFilter = null;
         genreToFilter = null;
-        durationToFilter = -1;
+        durationToFilter = Integer.MAX_VALUE;
         order = ScanningOrder.ADDING;
     }
 
@@ -34,7 +34,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         songList = new ArrayList<>(startingSize);
         artistToFilter = null;
         genreToFilter = null;
-        durationToFilter = -1;
+        durationToFilter = Integer.MAX_VALUE;
         order = ScanningOrder.ADDING;
     }
 
