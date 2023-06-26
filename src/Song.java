@@ -46,7 +46,7 @@ public class Song implements Cloneable{
     @Override
     public Song clone() {
         try {
-            return new Song(this.name, this.artist, this.genre, this.duration);
+            return (Song)super.clone();
         }
         catch (Exception e){
             return null;
