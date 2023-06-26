@@ -1,3 +1,6 @@
+/**
+ * Exception caused by something connected to a stack
+ */
 public class StackException extends RuntimeException{
     public StackException(){}
 

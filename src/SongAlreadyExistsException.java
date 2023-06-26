@@ -1,3 +1,6 @@
+/**
+ * Exception caused by trying to add a song that already exist (when only one instance of a song can be existed)
+ */
 public class SongAlreadyExistsException extends RuntimeException{
     public SongAlreadyExistsException(){}
 

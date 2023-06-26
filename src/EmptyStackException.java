@@ -1,3 +1,6 @@
+/**
+ * Exception thrown when trying to get an element from an empty stack
+ */
 public class EmptyStackException extends StackException{
     public EmptyStackException(){}
 
